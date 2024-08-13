@@ -25,7 +25,9 @@ type ChatMessage struct {
 	ToList     []string // 消息接收方列表，可能是多个，同一个企业内容为userid，非相同企业为external_userid。
 	Action     string   // 消息动作，目前有send(发送消息)/recall(撤回消息)/switch(切换企业日志)三种类型。
 	Type       string   // 消息类型
-	originData []byte   // 原始消息对象
+	MsgTime    int64
+	RoomId     string
+	originData []byte // 原始消息对象
 }
 
 // Unmarshal the origin data into map[string]interface{}

@@ -27,9 +27,9 @@ type SdkClient struct {
 // @param [in]  privateKey    消息加密私钥，可以在企业微信管理端--管理工具--消息加密公钥查看对用公钥，私钥一般由自己保存
 //
 // @return 返回是否初始化成功
-//      0   - 成功
-//  	!=0 - 失败
 //
+//	    0   - 成功
+//		!=0 - 失败
 func NewClient(corpId string, corpSecret string, rsaPrivateKey string) (Client, error) {
 	ptr := C.NewSdk()
 	corpIdC := C.CString(corpId)
@@ -59,7 +59,6 @@ func NewClient(corpId string, corpSecret string, rsaPrivateKey string) (Client, 
 //
 // @return chatData       返回本次拉取消息的数据，slice结构体.内容包括errcode/errmsg，以及每条消息内容。示例如下：
 // {"errcode":0,"errmsg":"ok","chatdata":[{"seq":196,"msgid":"CAQQ2fbb4QUY0On2rYSAgAMgip/yzgs=","publickey_ver":3,"encrypt_random_key":"ftJ+uz3n/z1DsxlkwxNgE+mL38H42/KCvN8T60gbbtPD+Rta1hKTuQPzUzO6Hzne97MgKs7FfdDxDck/v8cDT6gUVjA2tZ/M7euSD0L66opJ/IUeBtpAtvgVSD5qhlaQjvfKJc/zPMGNK2xCLFYqwmQBZXbNT7uA69Fflm512nZKW/piK2RKdYJhRyvQnA1ISxK097sp9WlEgDg250fM5tgwMjujdzr7ehK6gtVBUFldNSJS7ndtIf6aSBfaLktZgwHZ57ONewWq8GJe7WwQf1hwcDbCh7YMG8nsweEwhDfUz+u8rz9an+0lgrYMZFRHnmzjgmLwrR7B/32Qxqd79A==","encrypt_chat_msg":"898WSfGMnIeytTsea7Rc0WsOocs0bIAerF6de0v2cFwqo9uOxrW9wYe5rCjCHHH5bDrNvLxBE/xOoFfcwOTYX0HQxTJaH0ES9OHDZ61p8gcbfGdJKnq2UU4tAEgGb8H+Q9n8syRXIjaI3KuVCqGIi4QGHFmxWenPFfjF/vRuPd0EpzUNwmqfUxLBWLpGhv+dLnqiEOBW41Zdc0OO0St6E+JeIeHlRZAR+E13Isv9eS09xNbF0qQXWIyNUi+ucLr5VuZnPGXBrSfvwX8f0QebTwpy1tT2zvQiMM2MBugKH6NuMzzuvEsXeD+6+3VRqL"}]}
-//
 func (s *SdkClient) GetChatData(seq uint64, limit uint64, proxy string, passwd string, timeout int) ([]ChatData, error) {
 	proxyC := C.CString(proxy)
 	passwdC := C.CString(passwd)
@@ -144,6 +143,8 @@ func (s *SdkClient) DecryptData(encryptRandomKey string, encryptMsg string) (msg
 	msg.Action = baseMessage.Action
 	msg.Type = baseMessage.MsgType
 	msg.originData = buf
+	msg.MsgTime = baseMessage.MsgTime
+	msg.RoomId = baseMessage.RoomID
 	return msg, err
 }
 
